@@ -3,6 +3,7 @@ package dev.rochev.bookstore.service;
 import dev.rochev.bookstore.Book;
 import dev.rochev.bookstore.repo.BooksRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -27,15 +28,13 @@ public class BooksService {
         return booksRepo.findById(id);
     }
 
+    @Modifying
     @Transactional
-    public String addBook(@RequestBody String title, String author) {
-        Book book = new Book();
-        book.setTitle(title);
-        book.setAuthor(author);
+    public void addBook(@RequestBody Book book) {
         booksRepo.save(book);
-        return "Book added successfully";
     }
 
+    @Modifying
     @Transactional
     public void deleteBook(@PathVariable("id") int id) {
         booksRepo.deleteById(id);
